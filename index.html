@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
 <style>
 form {
     border: 3px solid #f1f1f1;
@@ -68,25 +70,54 @@ span.psw {
 
 <h2>Login Form</h2>
 
-<form action="/login_page" method="post">
+<form>
   <div class="imgcontainer">
-    <img src="img_avatar2.png" alt="Avatar" class="avatar">
+    <!--<img src="img_avatar2.png" alt="Avatar" class="avatar">-->
   </div>
 
   <div class="container">
     <label><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="user" required>
+    <input type="text" placeholder="Enter Username" id="user" required>
 
     <label><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="password" required>
+    <input type="password" placeholder="Enter Password" id="password" required>
         
-    <button type="submit">Login</button>
+    <button id="enter" type="submit">Login</button>
 <!--    <input type="checkbox" checked="checked"> Remember me-->
   </div>
 
   <div class="container" style="background-color:#f1f1f1">
-    <button type="button" class="cancelbtn">Cancel</button>
-<!--    <span class="psw">Forgot <a href="#">password?</a></span>-->
+    <button  type="button" class="cancelbtn">Cancel</button>
+
+    <script type="text/javascript">
+            $("#enter").click(function(){
+                var user,password;
+                user=$("#user").val();
+                password=$("#password").val();
+
+                if(user !== "" && password !== ""){
+                $.ajax({
+                    url:"/login_page",
+                    type: "POST",
+                    dataType: "json",
+                    data: JSON.stringify({user:user, password:password}),
+                    contentType: "application/json",
+                    cache: false,
+                    success: function(data){
+                        if(data.status === '200') {
+                            window.location = data.redirect;
+                        }else if(data.status === '400') {
+                            window.location = data.redirect;
+                            alert(data.message);
+                        }
+                    }
+                    , error: function(jqXHR, textStatus, err){
+                        alert('text status '+textStatus+', err '+err)
+                    }
+                });}
+            });
+    </script>
+
   </div>
 </form>
 

@@ -1,17 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <script src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript" src="js/phaser.min.js"></script>
-	<script src="js/game.js" type="text/javascript"></script>
-    <title>Give me a hug</title>
-</head>
-	
+<html>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<style>
+    .butt {
+        border: 1px outset red;
+        background-color: lightBlue;
+        height: 100px;
+        /*width:50px;*/
+        cursor: pointer;
+    }
+
+    .butt:hover {
+        background-color: blue;
+        color: white;
+    }
+</style>
 <body>
-    <div id='game'>ASD</div>
+<input id="hugMe" class="butt" type="submit" value="Give Me A Hug"/>
 </body>
 
-<script src="js/main.js" type="text/javascript"></script>
-<script src="js/client.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $("#hugMe").click(function () {
+            $.ajax({
+                url: "/game_1",
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                cache: false,
+                success: function (data) {
+                    window.location = data.redirect;
+                }
+                , error: function (jqXHR, textStatus, err) {
+                    alert('text status ' + textStatus + ', err ' + err)
+                }
+            });
+    });
+</script>
+
 </html>
